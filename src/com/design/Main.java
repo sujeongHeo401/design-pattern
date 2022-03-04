@@ -1,41 +1,51 @@
 package com.design;
 
 import com.design.adapter.*;
+import com.design.aop.AopBrowser;
+import com.design.proxy.BroswerProxy;
+import com.design.proxy.Browser;
+import com.design.proxy.IBrowser;
 import com.design.singleton.Aclazz;
 import com.design.singleton.Bclazz;
 import com.design.singleton.SocketClient;
 
+import javax.sql.rowset.BaseRowSet;
+import java.util.concurrent.atomic.AtomicLong;
+
 public class Main {
 
     public static void main(String[] args) {
-	// write your code here
-        /*
-        Aclazz aClazz = new Aclazz();
-        Bclazz bClazz = new Bclazz();
+//	    Browser browser = new Browser("www.naver.com");
+//        browser.show();
+//        browser.show();
+//        browser.show();
+//        browser.show();
 
-        SocketClient aClient = aClazz.getSocketClient();
-        SocketClient bClient = bClazz.getSocketClient();
+//        IBrowser browser = new BroswerProxy("www.naver.com");
+//        browser.show();
+//        browser.show();
+//        browser.show();
+//        browser.show();
+//        browser.show();
 
+        AtomicLong start = new AtomicLong();
+        AtomicLong end = new AtomicLong();
+        IBrowser aopBroswer = new AopBrowser("www.naver.com",
+                () -> {
+                    System.out.println("before");
+                    start.set(System.currentTimeMillis());
+                },
+                () -> {
+                    long now = System.currentTimeMillis();
+                    end.set(now - start.get());
+                }
+        );
 
-        System.out.println("두개의 객체가 동일한가?");
-        System.out.println(aClient.equals(bClient));
-        */
+        aopBroswer.show();
+        System.out.println("loading time : " + end.get());
 
-        HairDriver hairDriver = new HairDriver();
-        connect(hairDriver);
-
-        Cleaner cleaner = new Cleaner();
-        Electronic110V adapter = new SocketAdapter(cleaner);
-
-        connect(adapter);
-
-
-        AirConditioner airConditioner = new AirConditioner();
-        Electronic110V airAdapter = new SocketAdapter(airConditioner);
-
-        connect(airAdapter);
-
-
+        aopBroswer.show();
+        System.out.println("loading time : " + end.get());
     }
 
     
