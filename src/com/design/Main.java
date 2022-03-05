@@ -15,36 +15,34 @@ import com.design.proxy.IBrowser;
 import com.design.singleton.Aclazz;
 import com.design.singleton.Bclazz;
 import com.design.singleton.SocketClient;
+import com.design.strategy.*;
 
 import javax.sql.rowset.BaseRowSet;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Main {
     public static void main(String[] args) {
-        Ftp ftpClient = new Ftp("www.foo.co.kr", 22, "/home/etc");
-        ftpClient.connect();
-        ftpClient.moveDirectory();
+        Encoder encoder = new Encoder();
 
-        Writer writer = new Writer("text.tmp");
-        writer.fileConnect();
-        writer.write();
+        ///base64
+        EncodingStrategy base64 = new Base64Strategy();
 
-        Reader reader = new Reader("text.tmp");
-        reader.fileConnect();
-        reader.fileRead();
+        //normal
+        EncodingStrategy normal = new NormalStrategy();
 
-        reader.fileDisconnect();
-        writer.fileDisconnect();
-        ftpClient.disConnect();
+        String message = "hello java";
 
-        SftpClient sftpClient = new SftpClient("www.foo.co.kr", 22, "/home/etc", "text.tmp");
-        sftpClient.connect();
+        encoder.setEncodingStrategy(base64);
+        String base64Result = encoder.getMessage(message);
+        System.out.println(base64Result);
 
-        sftpClient.write();
+        encoder.setEncodingStrategy(normal);
+        String normalResult = encoder.getMessage(message);
+        System.out.println(normalResult);
 
-        sftpClient.read();
-
-        sftpClient.disConnect();
+        encoder.setEncodingStrategy(new AppendStrategy());
+        String appendResult = encoder.getMessage(message);
+        System.out.println(appendResult);
 
     }
 
