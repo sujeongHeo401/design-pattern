@@ -3,6 +3,8 @@ package com.design;
 import com.design.adapter.*;
 import com.design.aop.AopBrowser;
 import com.design.decorator.*;
+import com.design.observer.Button;
+import com.design.observer.IButtonListener;
 import com.design.proxy.BroswerProxy;
 import com.design.proxy.Browser;
 import com.design.proxy.IBrowser;
@@ -14,20 +16,19 @@ import javax.sql.rowset.BaseRowSet;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Main {
-
     public static void main(String[] args) {
-        ICar audi = new Audi(1000);
-        audi.showPrice();
-        //a3
-        ICar audi3 = new A3(audi, "A3");
-        audi3.showPrice();
-        //a4
-        ICar audi4 = new A4(audi, "A4");
-        audi4.showPrice();
+        Button button = new Button("버튼");
 
-        //a5
-        ICar audi5 = new A5(audi, "A5");
-        audi5.showPrice();
+        button.addListener(new IButtonListener() {
+            @Override
+            public void clickEvent(String event) {
+                System.out.println(event);
+            }
+        });
+        button.click("메시지 전달 : click1");
+        button.click("메시지 전달 : click2");
+        button.click("메시지 전달 : click3");
+        button.click("메시지 전달 : click4");
     }
 
     
