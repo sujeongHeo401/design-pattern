@@ -2,6 +2,7 @@ package com.design;
 
 import com.design.adapter.*;
 import com.design.aop.AopBrowser;
+import com.design.decorator.*;
 import com.design.proxy.BroswerProxy;
 import com.design.proxy.Browser;
 import com.design.proxy.IBrowser;
@@ -15,37 +16,21 @@ import java.util.concurrent.atomic.AtomicLong;
 public class Main {
 
     public static void main(String[] args) {
-//	    Browser browser = new Browser("www.naver.com");
-//        browser.show();
-//        browser.show();
-//        browser.show();
-//        browser.show();
+        ICar audi = new Audi(1000);
+        audi.showPrice();
 
-//        IBrowser browser = new BroswerProxy("www.naver.com");
-//        browser.show();
-//        browser.show();
-//        browser.show();
-//        browser.show();
-//        browser.show();
+        //a3
+        ICar audi3 = new A3(audi, "A3");
+        audi3.showPrice();
+        //a4
 
-        AtomicLong start = new AtomicLong();
-        AtomicLong end = new AtomicLong();
-        IBrowser aopBroswer = new AopBrowser("www.naver.com",
-                () -> {
-                    System.out.println("before");
-                    start.set(System.currentTimeMillis());
-                },
-                () -> {
-                    long now = System.currentTimeMillis();
-                    end.set(now - start.get());
-                }
-        );
+        ICar audi4 = new A4(audi, "A4");
+        audi4.showPrice();
 
-        aopBroswer.show();
-        System.out.println("loading time : " + end.get());
+        //a5
 
-        aopBroswer.show();
-        System.out.println("loading time : " + end.get());
+        ICar audi5 = new A5(audi, "A5");
+        audi5.showPrice();
     }
 
     
