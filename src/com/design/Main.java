@@ -3,6 +3,10 @@ package com.design;
 import com.design.adapter.*;
 import com.design.aop.AopBrowser;
 import com.design.decorator.*;
+import com.design.facade.Ftp;
+import com.design.facade.Reader;
+import com.design.facade.SftpClient;
+import com.design.facade.Writer;
 import com.design.observer.Button;
 import com.design.observer.IButtonListener;
 import com.design.proxy.BroswerProxy;
@@ -17,18 +21,31 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class Main {
     public static void main(String[] args) {
-        Button button = new Button("버튼");
+        Ftp ftpClient = new Ftp("www.foo.co.kr", 22, "/home/etc");
+        ftpClient.connect();
+        ftpClient.moveDirectory();
 
-        button.addListener(new IButtonListener() {
-            @Override
-            public void clickEvent(String event) {
-                System.out.println(event);
-            }
-        });
-        button.click("메시지 전달 : click1");
-        button.click("메시지 전달 : click2");
-        button.click("메시지 전달 : click3");
-        button.click("메시지 전달 : click4");
+        Writer writer = new Writer("text.tmp");
+        writer.fileConnect();
+        writer.write();
+
+        Reader reader = new Reader("text.tmp");
+        reader.fileConnect();
+        reader.fileRead();
+
+        reader.fileDisconnect();
+        writer.fileDisconnect();
+        ftpClient.disConnect();
+
+        SftpClient sftpClient = new SftpClient("www.foo.co.kr", 22, "/home/etc", "text.tmp");
+        sftpClient.connect();
+
+        sftpClient.write();
+
+        sftpClient.read();
+
+        sftpClient.disConnect();
+
     }
 
     
